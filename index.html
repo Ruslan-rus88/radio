@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Free web radio app — listen to Russian, English, and German radio stations" />
+    <title>Radio Roman</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header__inner container">
+            <div class="header__brand">
+                <span class="header__logo-icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                </span>
+                <span class="header__title">Radio Roman</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <i class="fas fa-search search-bar__icon"></i>
+                <input id="searchInput" class="search-bar__input" type="search"
+                    placeholder="Search any radio station worldwide…" autocomplete="off" />
+                <span id="searchGlobeHint" class="search-bar__globe-hint"
+                    title="Searches the global Radio Browser directory">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <button id="clearSearch" class="search-bar__clear" aria-label="Clear search" hidden>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Header actions -->
+            <div class="header__actions">
+                <button id="favToggle" class="btn-icon" title="My Favourites">
+                    <i class="fas fa-heart"></i>
+                    <span id="favCount" class="badge" hidden>0</span>
+                </button>
+                <button id="darkToggle" class="btn-icon" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main container">
+
+        <!-- Language filter tabs -->
+        <nav class="lang-tabs" role="tablist" aria-label="Filter by language">
+            <button class="lang-tabs__btn active" data-lang="all" role="tab" aria-selected="true">All</button>
+            <button class="lang-tabs__btn" data-lang="Russian" role="tab" aria-selected="false">Russian</button>
+            <button class="lang-tabs__btn" data-lang="English" role="tab" aria-selected="false">English</button>
+            <button class="lang-tabs__btn" data-lang="German" role="tab" aria-selected="false">German</button>
+        </nav>
+
+        <!-- API fetch status -->
+        <div id="apiFetchStatus" class="api-status" hidden>
+            <i class="fas fa-circle-notch fa-spin"></i> Searching…
+        </div>
+
+        <!-- Section title -->
+        <div class="section-header">
+            <h2 id="sectionTitle" class="section-header__title">All Stations</h2>
+            <span id="stationCount" class="section-header__count">0 stations</span>
+        </div>
+
+        <!-- Station grid -->
+        <div id="stationGrid" class="station-grid">
+            <!-- Cards injected by JS -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="empty-state">
+            <i class="fas fa-satellite-dish empty-state__icon"></i>
+            <p class="empty-state__text" id="emptyTitle">No favourites yet</p>
+            <p class="empty-state__sub" id="emptySubtitle">Search for a station and heart it to save it here</p>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div id="loadingState" class="loading-grid" hidden>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+
+    </main>
+
+    <!-- ===== LANGUAGE PICKER DIALOG ===== -->
+    <div id="favLangModal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="favDialogTitle">
+        <div id="favDialogOverlay" class="modal__overlay"></div>
+        <div class="modal__box">
+            <h3 class="modal__title" id="favDialogTitle">Save to Favourites</h3>
+            <p class="modal__subtitle">
+                Choose a category for <strong id="favDialogName"></strong>
+            </p>
+            <div class="modal__options">
+                <button class="modal__option" data-lang="Russian">
+                    <span class="modal__option-flag">🇷🇺</span> Russian
+                </button>
+                <button class="modal__option" data-lang="English">
+                    <span class="modal__option-flag">🇬🇧</span> English
+                </button>
+                <button class="modal__option" data-lang="German">
+                    <span class="modal__option-flag">🇩🇪</span> German
+                </button>
+                <button class="modal__option" data-lang="other">
+                    <span class="modal__option-flag">🌐</span> Other
+                </button>
+            </div>
+            <button id="favDialogCancel" class="modal__cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ===== STICKY PLAYER ===== -->
+    <footer id="player" class="player" aria-label="Audio player" hidden>
+        <div class="player__inner container">
+
+            <!-- Station info -->
+            <div class="player__info">
+                <div id="playerLogo" class="player__logo">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="player__meta">
+                    <span id="playerName" class="player__name">No station selected</span>
+                    <span id="playerGenre" class="player__genre">—</span>
+                </div>
+                <div id="playerStatus" class="player__status player__status--idle">
+                    <span class="player__status-dot"></span>
+                    <span id="playerStatusText" class="player__status-text">Idle</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="player__controls">
+                <button id="prevBtn" class="player__btn player__btn--secondary" title="Previous station" disabled>
+                    <i class="fas fa-backward-step"></i>
+                </button>
+                <button id="playBtn" class="player__btn player__btn--primary" title="Play / Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="nextBtn" class="player__btn player__btn--secondary" title="Next station" disabled>
+                    <i class="fas fa-forward-step"></i>
+                </button>
+            </div>
+
+            <!-- Volume -->
+            <div class="player__volume">
+                <button id="muteBtn" class="player__btn player__btn--small" title="Mute / Unmute">
+                    <i class="fas fa-volume-high"></i>
+                </button>
+                <input id="volumeSlider" class="player__slider" type="range" min="0" max="100" value="80"
+                    aria-label="Volume" />
+                <span id="volumeValue" class="player__volume-value">80%</span>
+
+                <!-- Favourite toggle in player -->
+                <button id="playerFavBtn" class="player__btn player__btn--small" title="Add to favourites">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Hidden audio element -->
+        <audio id="audioElement" preload="none"></audio>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="js/dialog.js"></script>
+    <script src="js/stations.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
