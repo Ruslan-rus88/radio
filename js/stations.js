@@ -73,9 +73,7 @@ const StationsUI = (() => {
         <span class="station-card__name" title="${escapeHtml(station.name)}">${escapeHtml(station.name)}</span>
         <div class="station-card__meta">
           <span>${escapeHtml(station.country || 'Unknown')}</span>
-          <span class="station-card__dot"></span>
           <span>${escapeHtml(station.language || '—')}</span>
-          <span class="station-card__dot"></span>
           <span>${escapeHtml(station.genre || 'Various')}</span>
         </div>
       </div>
