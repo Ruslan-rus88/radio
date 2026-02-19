@@ -331,14 +331,15 @@ Search bar
   z-index: 90;
   background: var(--color-bg);
   padding-top: 0.75rem;
-  padding-bottom: 0.25rem;
   margin-bottom: 0.5rem;
   /* Bleed to edges of container so the bg covers scroll content */
   margin-left: calc(-1 * var(--container-px, 1.25rem));
   margin-right: calc(-1 * var(--container-px, 1.25rem));
   padding-left: var(--container-px, 1.25rem);
   padding-right: var(--container-px, 1.25rem);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1.5px solid var(--color-player-border);
+
 }
 
 /* Subtle shadow that appears only once content scrolls beneath */
@@ -492,8 +493,8 @@ Search bar
 .station-card {
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1.125rem;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
@@ -566,7 +567,7 @@ Search bar
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.875rem;
+  font-size: 1.1rem;
   color: var(--color-text-faint);
   transition: color var(--transition-fast), transform var(--transition-fast);
   flex-shrink: 0;
@@ -685,8 +686,8 @@ Search bar
 }
 
 .equalizer__bar {
-  width: 3px;
-  background: var(--color-primary);
+  width: 2px;
+  background: #fff;
   border-radius: 2px;
   animation: equalizeBar 0.8s ease-in-out infinite alternate;
 }
