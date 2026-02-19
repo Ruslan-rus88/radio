@@ -19,6 +19,7 @@ const Player = (() => {
   const playerStatus = () => document.getElementById('playerStatus');
   const playerStatusText = () => document.getElementById('playerStatusText');
   const playerFavBtn = () => document.getElementById('playerFavBtn');
+  const airplayBtn   = () => document.getElementById('airplayBtn');
 
   /* ---- State ---- */
   let _currentStation = null;
@@ -337,6 +338,23 @@ const Player = (() => {
       StationsUI.updateCardFavState(_currentStation.id);
       App.updateFavBadge();
     });
+
+    // AirPlay (iOS Safari only)
+    if ('webkitShowPlaybackTargetPicker' in audio) {
+      // Show button only when at least one AirPlay device is reachable
+      audio.addEventListener('webkitplaybacktargetavailabilitychanged', e => {
+        airplayBtn().hidden = e.availability !== 'available';
+      });
+
+      // Reflect active-casting state on the button
+      audio.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => {
+        airplayBtn().classList.toggle('is-casting', !!audio.webkitCurrentPlaybackTargetIsWireless);
+      });
+
+      airplayBtn().addEventListener('click', () => {
+        audio.webkitShowPlaybackTargetPicker();
+      });
+    }
 
     // Keyboard shortcuts (space = play/pause, m = mute)
     document.addEventListener('keydown', (e) => {

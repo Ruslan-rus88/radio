@@ -951,6 +951,17 @@ Search bar
   color: var(--color-accent);
 }
 
+/* AirPlay button */
+.player__btn--airplay .airplay-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  display: block;
+}
+
+.player__btn--airplay.is-casting {
+  color: var(--color-primary);
+}
+
 /* Volume */
 .player__volume {
   display: flex;
