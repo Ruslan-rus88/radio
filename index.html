@@ -67,21 +67,22 @@
     <!-- ===== MAIN ===== -->
     <main class="main container">
 
-        <!-- Language filter tabs -->
-        <nav class="lang-tabs" role="tablist" aria-label="Filter by language">
-            <button class="lang-tabs__btn active" data-lang="all" role="tab" aria-selected="true">All</button>
-            <button class="lang-tabs__btn" data-lang="Russian" role="tab" aria-selected="false">Russian</button>
-            <button class="lang-tabs__btn" data-lang="English" role="tab" aria-selected="false">English</button>
-            <button class="lang-tabs__btn" data-lang="German" role="tab" aria-selected="false">German</button>
-        </nav>
+        <!-- Sticky filter bar: lang tabs + search suggestions -->
+        <div class="filter-bar">
+            <nav class="lang-tabs" role="tablist" aria-label="Filter by language">
+                <button class="lang-tabs__btn active" data-lang="all" role="tab" aria-selected="true">All</button>
+                <button class="lang-tabs__btn" data-lang="Russian" role="tab" aria-selected="false">Russian</button>
+                <button class="lang-tabs__btn" data-lang="English" role="tab" aria-selected="false">English</button>
+                <button class="lang-tabs__btn" data-lang="German" role="tab" aria-selected="false">German</button>
+            </nav>
 
-        <!-- Search suggestions -->
-        <div class="search-suggestions" aria-label="Search suggestions">
-            <span class="search-suggestions__label">Search:</span>
-            <button class="search-suggestions__chip" data-query="Pop">Pop</button>
-            <button class="search-suggestions__chip" data-query="Slow">Slow</button>
-            <button class="search-suggestions__chip" data-query="HipHop">HipHop</button>
-            <button class="search-suggestions__chip" data-query="Retro">Retro</button>
+            <!-- Search suggestions -->
+            <div class="search-suggestions" aria-label="Search suggestions">
+                <button class="search-suggestions__chip" data-query="Pop">Pop</button>
+                <button class="search-suggestions__chip" data-query="Slow">Slow</button>
+                <button class="search-suggestions__chip" data-query="HipHop">HipHop</button>
+                <button class="search-suggestions__chip" data-query="Retro">Retro</button>
+            </div>
         </div>
 
         <!-- API fetch status -->

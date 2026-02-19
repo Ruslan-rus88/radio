@@ -319,7 +319,37 @@ Search bar
    Main content area
    ============================================================ */
 .main {
-  padding-top: 1rem;
+  padding-top: 0;
+}
+
+/* ============================================================
+   Sticky filter bar (lang tabs + search suggestions)
+   ============================================================ */
+.filter-bar {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 90;
+  background: var(--color-bg);
+  padding-top: 0.75rem;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  /* Bleed to edges of container so the bg covers scroll content */
+  margin-left: calc(-1 * var(--container-px, 1.25rem));
+  margin-right: calc(-1 * var(--container-px, 1.25rem));
+  padding-left: var(--container-px, 1.25rem);
+  padding-right: var(--container-px, 1.25rem);
+  padding-bottom: 0.5rem;
+}
+
+/* Subtle shadow that appears only once content scrolls beneath */
+.filter-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  bottom: -0.75rem;
+  background: linear-gradient(to bottom, var(--color-bg) 60%, transparent);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* ============================================================
@@ -371,7 +401,7 @@ Search bar
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 .search-suggestions__label {
