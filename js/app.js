@@ -38,6 +38,7 @@ const App = (() => {
 
     bindLangTabs();
     bindSearch();
+    bindSearchSuggestions();
     bindFavToggle();
     bindDarkToggle();
 
@@ -140,18 +141,15 @@ const App = (() => {
 
         activeLanguage = btn.dataset.lang;
 
-        if (showingFavourites) {
-          // In fav mode: language tab filters by assigned favLanguage category
-          showFavourites();
-        } else {
-          // In search mode: language tab refines API search
-          if (searchQuery.trim()) {
-            runApiSearch(searchQuery.trim());
-          } else {
-            // No active search — go back to favourites for this language
-            enterFavouritesMode();
-          }
-        }
+        // Always clear search and show favourites filtered by the selected language
+        searchInput().value = '';
+        searchQuery = '';
+        clearSearchBtn().hidden = true;
+        syncSuggestionChips('');
+
+        showingFavourites = true;
+        favToggle().classList.add('active');
+        showFavourites();
       });
     });
   }
@@ -168,6 +166,7 @@ const App = (() => {
 
       if (!searchQuery.trim()) {
         // Search cleared — return to favourites
+        syncSuggestionChips('');
         enterFavouritesMode();
         return;
       }
@@ -175,6 +174,7 @@ const App = (() => {
       // Exit favourites mode when user starts typing
       if (showingFavourites) leaveFavouritesMode();
 
+      syncSuggestionChips(searchQuery);
       searchDebounce = setTimeout(() => runApiSearch(searchQuery.trim()), 320);
     });
 
@@ -184,6 +184,30 @@ const App = (() => {
       clearSearchBtn().hidden = true;
       enterFavouritesMode();
       searchInput().focus();
+    });
+  }
+
+  /* ============================================================
+     Search suggestions chips
+     ============================================================ */
+  function syncSuggestionChips(query) {
+    const normalised = query.trim().toLowerCase();
+    document.querySelectorAll('.search-suggestions__chip').forEach(chip => {
+      const matches = normalised !== '' && chip.dataset.query.toLowerCase() === normalised;
+      chip.classList.toggle('active', matches);
+    });
+  }
+
+  function bindSearchSuggestions() {
+    document.querySelectorAll('.search-suggestions__chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const query = chip.dataset.query;
+        const input = searchInput();
+        input.value = query;
+        // Dispatch an input event so the existing search logic picks it up
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+      });
     });
   }
 
@@ -202,6 +226,7 @@ const App = (() => {
   function enterFavouritesMode() {
     showingFavourites = true;
     favToggle().classList.add('active');
+    syncSuggestionChips('');
 
     // Reset lang tab to "All" so the user sees all favourites first
     document.querySelectorAll('.lang-tabs__btn').forEach(b => {
@@ -217,11 +242,10 @@ const App = (() => {
   function leaveFavouritesMode() {
     showingFavourites = false;
     favToggle().classList.remove('active');
-    // Restore "All" as active tab
+    // Clear all lang-tab highlights — no tab is active while a search is running
     document.querySelectorAll('.lang-tabs__btn').forEach(b => {
-      const isAll = b.dataset.lang === 'all';
-      b.classList.toggle('active', isAll);
-      b.setAttribute('aria-selected', isAll ? 'true' : 'false');
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
     });
     activeLanguage = 'all';
   }
