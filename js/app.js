@@ -206,7 +206,8 @@ const App = (() => {
         input.value = query;
         // Dispatch an input event so the existing search logic picks it up
         input.dispatchEvent(new Event('input', { bubbles: true }));
-        input.focus();
+        // Blur instead of focus — keeps the keyboard hidden on mobile
+        input.blur();
       });
     });
   }

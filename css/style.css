@@ -229,6 +229,13 @@ Search bar
   box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
+/* Prevent iOS Safari from zooming on input focus (requires font-size >= 16px) */
+@media (max-width: 768px) {
+  .search-bar__input {
+    font-size: 1rem;
+  }
+}
+
 .search-bar__input::placeholder {
   color: var(--color-text-faint);
 }
